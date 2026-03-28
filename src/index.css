@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white selection:bg-primary/20 relative;
+    color: #1e293b;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* Hyper-realistic subtle grain texture overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight text-dark-green;
+  }
+}
+
+@layer components {
+  /* We remove the old glass styling logic since the SaaS theme utilizes 
+     clean borders and drop-shadows over glassmorphism */
+  .saas-card {
+    @apply bg-white border border-border-green rounded-2xl transition-all duration-500;
+    box-shadow: 0px 2px 4px rgba(22, 163, 74, 0.04), 0px 4px 12px rgba(22, 163, 74, 0.04);
+  }
+  .saas-card:hover {
+    box-shadow: 0px 4px 6px rgba(22, 163, 74, 0.05), 0px 10px 24px rgba(22, 163, 74, 0.08), 0px 20px 48px -12px rgba(22, 163, 74, 0.12);
+  }
+
+  .btn-primary {
+    @apply inline-flex justify-center items-center px-6 py-3 rounded-[3rem] bg-primary hover:bg-primary-light text-white font-semibold transition-all hover:-translate-y-0.5;
+    box-shadow: 0px 4px 6px rgba(22, 163, 74, 0.05), 0px 10px 24px rgba(22, 163, 74, 0.08), 0px 20px 48px -12px rgba(22, 163, 74, 0.12);
+  }
+  .btn-primary:hover {
+    box-shadow: 0px 10px 15px rgba(22, 163, 74, 0.08), 0px 24px 48px rgba(22, 163, 74, 0.12), 0px 40px 80px -20px rgba(22, 163, 74, 0.15);
+  }
+
+  .btn-outline {
+    @apply inline-flex justify-center items-center px-6 py-3 rounded-xl border-2 border-primary text-primary hover:bg-bg-pale font-semibold transition-all;
+  }
+}
+
+/* Custom scrollbar optimized for bright themes */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-50;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 rounded-full hover:bg-slate-400 transition-colors;
+}

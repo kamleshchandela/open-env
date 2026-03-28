@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { FileText, ArrowRight } from 'lucide-react';
 
 const FileChip = ({ name }) => (
-  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-bg-pale border border-border-green hover:bg-bg-mint hover:scale-105 transition-all duration-300 cursor-default">
-    <FileText size={12} className="text-primary-light" />
-    <span className="text-[12px] font-mono font-medium text-primary">{name}</span>
+  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/60 backdrop-blur-md border border-white font-medium text-[11px] md:text-[12px] hover:bg-white hover:scale-105 transition-all duration-300 shadow-sm cursor-default">
+    <FileText size={12} className="text-primary" />
+    <span className="text-dark-green font-mono">{name}</span>
   </div>
 );
 
@@ -23,49 +23,55 @@ const PartsCard = ({ part, name, desc, files, status, delay }) => {
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.5, delay }}
-      whileHover={{ y: -6, transition: { duration: 0.2 } }}
+      transition={{ duration: 0.6, delay, type: 'spring', stiffness: 100, damping: 20 }}
+      whileHover={{ y: -8 }}
       onClick={handleClick}
-      className={`bg-white rounded-2xl border-y border-r border-[#bbf7d0] border-l-[4px] border-l-primary flex flex-col h-full shadow-sm hover:shadow-xl hover:shadow-primary/10 transition-shadow duration-300 ${part === '1' ? 'cursor-pointer' : ''}`}
+      className={`group relative bg-white/40 backdrop-blur-3xl rounded-[3rem] border border-white/80 flex flex-col h-full shadow-realistic-sm hover:shadow-[0_40px_80px_-20px_rgba(22,163,74,0.15)] transition-all duration-500 overflow-hidden ${part === '1' ? 'cursor-pointer' : ''}`}
       id={`part-${part}`}
     >
-      <div className="p-6 md:p-8 flex flex-col h-full">
+      {/* Soft Ambient Inner Glow */}
+      <div className="absolute -top-10 -right-10 w-48 h-48 bg-primary/10 rounded-full blur-[50px] pointer-events-none group-hover:bg-primary/20 transition-colors duration-700" />
+      <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-cyan-400/10 rounded-full blur-[40px] pointer-events-none group-hover:bg-cyan-400/20 transition-colors duration-700 delay-100" />
+
+      <div className="p-8 md:p-10 flex flex-col h-full relative z-10">
         
         {/* Header */}
-        <div className="flex items-start justify-between mb-4">
-          <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold tracking-widest uppercase">
-            PART {part.padStart(2, '0')}
-          </span>
-          <div className="flex items-center gap-2">
-            <span className={`text-[11px] font-bold uppercase tracking-wider ${isReady ? 'text-primary' : 'text-slate-400'}`}>
+        <div className="flex items-start justify-between mb-8">
+          <div className="px-4 py-2 rounded-full bg-white/80 border border-white shadow-sm flex items-center gap-2">
+            <span className="text-[10px] font-black tracking-widest uppercase text-primary">
+              PART {part.padStart(2, '0')}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-1 bg-white/50 backdrop-blur-md rounded-full border border-white/50">
+            <span className={`text-[10px] font-bold uppercase tracking-widest ${isReady ? 'text-primary' : 'text-slate-400'}`}>
               {isReady ? 'Ready' : 'Upcoming'}
             </span>
-            <div className={`w-2 h-2 rounded-full ${isReady ? 'bg-success' : 'bg-slate-300'}`} />
+            <div className={`w-2 h-2 rounded-full ${isReady ? 'bg-success animate-pulse-subtle' : 'bg-slate-300'}`} />
           </div>
         </div>
 
         {/* Body */}
-        <h3 className="text-2xl font-bold font-display text-dark-green mb-2">{name}</h3>
-        <p className="text-sm text-text-medium mb-6 leading-relaxed line-clamp-2">{desc}</p>
+        <h3 className="text-3xl font-bold font-display text-dark-green mb-3 group-hover:text-primary transition-colors duration-300 tracking-tight">{name}</h3>
+        <p className="text-base text-text-medium mb-8 leading-relaxed font-medium line-clamp-2">{desc}</p>
 
         {/* Chips */}
-        <div className="flex flex-wrap gap-2 mb-8 mt-auto">
+        <div className="flex flex-wrap gap-2 mb-10 mt-auto">
           {files.map((file, i) => <FileChip key={i} name={file} />)}
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="px-6 md:px-8 py-4 border-t border-border-green flex items-center justify-between mt-auto bg-slate-50/50 rounded-b-2xl">
-        <span className="text-xs font-semibold text-text-medium">
+      {/* Footer entirely glassmorphic */}
+      <div className="relative z-10 px-8 py-5 border-t border-white/60 flex items-center justify-between mt-auto bg-white/20 backdrop-blur-md rounded-b-[3rem]">
+        <span className="text-sm font-bold text-text-medium px-3 py-1 bg-white/40 rounded-full">
           {files.length} {files.length === 1 ? 'file' : 'files'}
         </span>
         
         {part === '1' ? (
-          <span className="text-xs font-bold text-primary flex items-center group-hover:text-primary-light transition-colors">
-            View Details <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
+          <span className="text-sm font-bold text-primary flex items-center group-hover:text-primary-light transition-colors py-1">
+            View Details <ArrowRight size={16} className="ml-1 group-hover:translate-x-2 transition-transform duration-300" />
           </span>
         ) : (
-          <span className="text-xs font-semibold text-slate-400">
+          <span className="text-sm font-bold text-slate-400 py-1">
             Coming Soon
           </span>
         )}
@@ -135,25 +141,32 @@ const PartsGrid = () => {
   ];
 
   return (
-    <section className="py-24 bg-off-white px-6">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-32 relative bg-transparent px-6 overflow-hidden z-10 border-t border-white/50">
+      <div className="max-w-[85rem] mx-auto relative z-10">
         
-        <div className="mb-16">
-          <span className="text-xs font-bold tracking-widest text-primary uppercase block mb-2">Project Structure</span>
-          <h2 className="text-4xl md:text-5xl font-bold font-display text-dark-green mb-4 tracking-tight">
-            8 Parts. Complete Coverage.
-          </h2>
-          <p className="text-lg text-text-medium max-w-2xl">
-            Every file explained. Every decision justified. Build with confidence.
-          </p>
+        <div className="mb-20 max-w-3xl">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+          >
+            <span className="text-xs font-bold tracking-widest text-primary uppercase mb-4 inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 shadow-sm backdrop-blur-md">Architecture</span>
+            <h2 className="text-5xl md:text-7xl font-bold font-display text-dark-green tracking-tight leading-[1.1] mb-6 drop-shadow-sm">
+              8 Foundational Parts.<br /><span className="text-primary/90 italic">Zero Black Boxes.</span>
+            </h2>
+            <p className="text-xl text-text-medium font-medium leading-relaxed">
+              Every system, from environment states down to the exact Pydantic schema schemas, is explicitly documented. Build with total confidence.
+            </p>
+          </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
           {partsData.map((part, index) => (
             <PartsCard
               key={index}
               {...part}
-              delay={index * 0.1}
+              delay={index * 0.15}
             />
           ))}
         </div>
